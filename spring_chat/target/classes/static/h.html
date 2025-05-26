@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <input style="font-size: larger;height: 1.5cm;" id="msgin" type="text" placeholder="write some message">
+    <div id="send" style="cursor: pointer;min-height: 1cm;max-height: 3.5cm;overflow-y: auto;background-color: aquamarine;margin-bottom: 1cm;"> </div>
+    <div id="close" style="cursor: pointer;height: 4cm;background-color: rgb(200, 216, 211);display: flex;justify-content: center;align-items: center;">close</div>
+      <div id="openn" style="cursor: pointer;height: 4cm;background-color: rgb(179, 179, 180);display: flex;justify-content: center;align-items: center;">open</div>
+
+
+   
+</body>
+<script>
+  const msg=document.getElementById("msgin");
+  const send =document.getElementById("send");
+  const closee =document.getElementById("close");
+  const openn =document.getElementById("openn");
+
+
+    const inputMsg =document.getElementById("inputMsg");
+   console.log(document.baseURI);
+    function registerWsListeners(ws){
+       ws.onmessage = function(event) {
+         send.innerText=send.innerText+"\n"+event.data;
+        console.log("Received:", event.data);
+       };
+       ws.onopen=function(event) {
+         send.innerText="opened";
+         console.log("connected:");
+       };
+       ws.onclose=function(event) {
+         send.innerText="closed";
+         console.log("closed:");
+       };
+       ws.onerror = function(event) {
+         send.innerText=event.data;
+        console.log("Received:", event.data);
+       };
+   }
+    
+
+    let ws = new WebSocket("ws://localhost/");
+     registerWsListeners(ws);
+
+function sendMsg(message) {
+  
+        if(ws.readyState<=1&&message.trim()!==""){
+          msg.value="";
+            fetch('/send', {
+          method: 'POST', // Use POST method
+          headers: {
+           'Content-Type': 'text/plain', // Ensure the server knows you're sending JSON
+          },
+          body: message // Convert the message to JSON
+       })
+       .then(response => response.json())
+       .then(data => {
+        console.log("Server response (fetch):", data);
+   // send.innerText=send.innerText+data.Message;
+        })
+        .catch(error => {
+          console.error("Error:", error); // Handle any error that occurs
+        });
+        }
+     
+  
+}
+
+msg.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter"){
+     const message=msg.value;
+    sendMsg(message);
+  }
+});
+
+    send.addEventListener("click",()=>{
+       const message=msg.value;
+       sendMsg(message);
+    });
+
+
+ closee.addEventListener("click",()=>{
+   ws.close();
+ });
+   openn.addEventListener("click",()=>{
+    if(ws.readyState>1){
+        ws=new WebSocket("ws://192.168.11.109/ws");
+     registerWsListeners(ws);
+    }
+  
+ });
+
+</script>
+
+</html>

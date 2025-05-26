@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/script.js" defer></script>
+    <link href="main.css" rel="stylesheet" />
+
+    <title>Chat App</title>
+   
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="header">
+                <h2 th:text="${username}">Username</h2>
+                <button class="disconnect-button" id="disconnectButton">Disconnect</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab active" data-tab="contacts">Contacts</div>
+                <div class="tab" data-tab="search">Search Users</div>
+                <div class="tab" data-tab="create-group">Create Group</div>
+            </div>
+            
+            <div class="tab-content active" id="contacts-tab">
+                <div class="contacts-list" id="contactsList">
+                    <!-- Contacts will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="search-tab">
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="create-group-tab">
+                <div class="create-group-container">
+                    <form class="group-form" id="groupForm">
+                        <input type="text" class="group-name-input" id="groupNameInput" placeholder="Group name" required>
+                        
+                        <div class="group-members-container">
+                            <div class="group-members-title">Selected Members</div>
+                            <div class="group-members-list" id="selectedMembersList">
+                                <!-- Selected members will appear here -->
+                            </div>
+                            
+                            <div class="group-members-title">Available Contacts</div>
+                            <div class="available-contacts" id="availableContacts">
+                                <!-- Contacts will be loaded here for selection -->
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="create-group-button" id="createGroupButton">Create Group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-container">
+            <div class="chat-header" id="chatHeader">
+                Select a contact to start chatting
+            </div>
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages will be displayed here -->
+            </div>
+            <div class="message-input-container">
+                <textarea class="message-input" id="messageInput" placeholder="Type your message here..." disabled></textarea>
+                <button class="send-button" id="sendButton" disabled>Send</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Invitation Modal -->
+    <div class="modal" id="invitationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">New Invitation</div>
+                <button class="close-button" id="closeInvitationModal">&times;</button>
+            </div>
+            <div class="modal-body" id="invitationModalBody">
+                <!-- Invitation content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button primary" id="acceptInvitationButton">Accept</button>
+                <button class="modal-button danger" id="rejectInvitationButton">Reject</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notificationMessage"></div>
+        <div class="notification-close" id="notificationClose">&times;</div>
+    </div>
+    
+
+</body>
+</html>
